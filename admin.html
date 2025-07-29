@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Panel - Lifestyle Shopping</title>
+  <link rel="stylesheet" href="1styles.css">
+  <style>
+    .dashboard-stats {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: space-around;
+      margin-top: 30px;
+    }
+
+    .stat-card {
+      flex: 1 1 200px;
+      padding: 20px;
+      background: #ecf0f1;
+      border-radius: 10px;
+      text-align: center;
+      box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .stat-card h2 {
+      font-size: 2rem;
+      margin-bottom: 10px;
+      color: #2c3e50;
+    }
+
+    .stat-card p {
+      font-size: 1.1rem;
+    }
+
+    .product-list {
+      margin-top: 20px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+    }
+
+    .product {
+      background: #fdfdfd;
+      padding: 15px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      text-align: center;
+    }
+
+    .product img {
+      margin: 10px 0;
+      max-height: 100px;
+      object-fit: contain;
+    }
+
+    .auth-form label {
+      font-weight: bold;
+    }
+
+    .auth-form input[type="text"],
+    .auth-form input[type="number"] {
+      width: 100%;
+      padding: 10px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+
+    .auth-form button {
+      background-color: #27ae60;
+      color: white;
+      border: none;
+      padding: 10px;
+      border-radius: 5px;
+      margin-top: 10px;
+      cursor: pointer;
+    }
+
+    .auth-form button:hover {
+      background-color: #219150;
+    }
+
+    .product button {
+      background-color: #e74c3c;
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .product button:hover {
+      background-color: #c0392b;
+    }
+  </style>
+</head>
+<body>
+
+
+<script>
+  const user = localStorage.getItem("loggedInUser");
+  // Define admin email(s)
+  const adminEmails = ["admin@lifestyle.com"];
+
+  if (!user || !adminEmails.includes(user)) {
+    alert("Access denied. Admins only!");
+    window.location.href = "1index.html";
+  }
+</script>
+
+  <header>
+    <h1>Admin Dashboard</h1>
+    <nav>
+      <a href="admin.html">Dashboard</a>
+      <a href="admin-orders.html">Orders</a>
+      <a href="admin-users.html">Users</a>
+      <a href="1index.html">Site Home</a>
+    </nav>
+  </header>
+
+  <main>
+    <h2>Manage Products</h2>
+
+    <form id="productForm" class="auth-form" onsubmit="addProduct(event)">
+      <label for="productName">Product Name:</label>
+      <input type="text" id="productName" required>
+
+      <label for="productPrice">Price (₹):</label>
+      <input type="number" id="productPrice" min="0" required>
+
+      <label for="productImage">Image URL:</label>
+      <input type="text" id="productImage" placeholder="https://example.com/image.jpg">
+
+       <label for="productCategory">Category:</label>
+      <input type="text" id="productCategory" placeholder="e.g. fashion, electronics" required>
+
+      <button type="submit">Add Product</button>
+    </form>
+
+    <div class="search-bar" style="margin: 20px 0;">
+      <input type="text" id="searchInput" placeholder="Search product name..." oninput="showProducts()">
+      <select id="categoryFilter" onchange="showProducts()">
+        <option value="">All Categories</option>
+      </select>
+    </div>
+
+
+    <section>
+      <h2>Product List</h2>
+      <div id="productList" class="product-list"></div>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Lifestyle Shopping</p>
+  </footer>
+
+  <script>
+    let products = JSON.parse(localStorage.getItem("products")) || [];
+
+    function addProduct(event) {
+      event.preventDefault();
+
+      const name = document.getElementById("productName").value.trim();
+      const price = parseFloat(document.getElementById("productPrice").value);
+      const image = document.getElementById("productImage").value.trim();
+      const category = document.getElementById("productCategory").value.trim().toLowerCase();
+
+      const newProduct = { name, price, image, category };
+      products.push(newProduct);
+      localStorage.setItem("products", JSON.stringify(products));
+
+      document.getElementById("productForm").reset();
+      populateCategoryFilter();                                 
+      showProducts();
+    }
+
+    function deleteProduct(index) {
+      if (confirm("Delete this product?")) {
+        products.splice(index, 1);
+        localStorage.setItem("products", JSON.stringify(products));
+        populateCategoryFilter();        
+        showProducts();
+      }
+    }
+
+    function updateName(index, newName) {
+    products[index].name = newName.trim();
+    localStorage.setItem("products", JSON.stringify(products));
+  }
+
+  function updatePrice(index, newPriceText) {
+    const priceMatch = newPriceText.match(/₹?(\d+(\.\d+)?)/);
+    if (priceMatch) {
+      products[index].price = parseFloat(priceMatch[1]);
+      localStorage.setItem("products", JSON.stringify(products));
+    } else {
+      alert("Invalid price format!");
+    }
+  }
+
+function updateImage(index, newImageUrl) {
+  if (newImageUrl.trim() !== "") {
+    products[index].image = newImageUrl.trim();
+    localStorage.setItem("products", JSON.stringify(products));
+    showProducts(); // Refresh UI
+  }
+}
+    function populateCategoryFilter() {
+      const categorySet = new Set(products.map(p => p.category).filter(Boolean));
+      const CategoriesSelect = document.getElementById("categoryFilter");
+      
+      categoryFilter.innerHTML = '<option value="">All Categories</option>';
+      categorySet.forEach(category => {
+        const option = document.createElement("option");
+        option.value = category;
+        option.textContent = category.charAt(0).toUpperCase() + category.slice(1);
+        categoryFilter.appendChild(option);
+      });
+    }
+    function populateCategoryFilter() {
+    const categorySelect = document.getElementById("categoryFilter");
+    const categories = [...new Set(products.map(p => p.category).filter(Boolean))];
+
+    categorySelect.innerHTML = '<option value="">All Categories</option>';
+    categories.forEach(cat => {
+      const option = document.createElement("option");
+      option.value = cat;
+      option.textContent = cat.charAt(0).toUpperCase() + cat.slice(1);
+      categorySelect.appendChild(option);
+    });
+  }
+
+  function showProducts() {
+    const list = document.getElementById("productList");
+    const searchInput = document.getElementById("searchInput").value.toLowerCase();
+    const categoryFilter = document.getElementById("categoryFilter").value;
+
+    list.innerHTML = "";
+
+    const filtered = products.filter(p => {
+      return (!searchInput || p.name.toLowerCase().includes(searchInput)) &&
+             (!categoryFilter || p.category === categoryFilter);
+    });
+
+    if (filtered.length === 0) {
+      list.innerHTML = "<p>No products match your filter.</p>";
+    } else {
+      filtered.forEach((product, index) => {
+        const div = document.createElement("div");
+        div.className = "product";
+        div.innerHTML = `
+          <h3 contenteditable="true" onblur="updateName(${index}, this.innerText)">${product.name}</h3>
+          <p contenteditable="true" onblur="updatePrice(${index}, this.innerText)">Price: ₹${product.price}</p>
+          ${product.image ? `<img src="${product.image}" alt="${product.name}" width="100">` : ""}
+          <br>
+          <input type="text" placeholder="New Image URL" onchange="updateImage(${index}, this.value)">
+          <br>
+          <small>Category: ${product.category}</small>
+          <br>
+          <button onclick="deleteProduct(${index})">Delete</button>
+        `;
+        list.appendChild(div);
+      });
+    }
+  }
+
+  // Initial call
+    populateCategoryFilter();   
+    showProducts();
+  </script>
+</body>
+</html>

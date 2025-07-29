@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Lifestyle Shopping</title>
+  <link rel="stylesheet" href="1styles.css">
+</head>
+<body>
+  <header>
+    <h1>Lifestyle Shopping</h1>
+    <nav>
+      <a href="1login.html">Login</a>
+      <a href="1register.html">Register</a>
+      <a href="1products.html">Shop</a>
+      <a href="1cart.html">Cart</a>
+    </nav>
+  </header>
+
+  <main>
+    <h2>Welcome to our Lifestyle Store!</h2>
+    <p>Shop your favorite lifestyle products online easily and securely.</p>
+    <a href="1products.html" class="btn">Start Shopping</a>
+ <div id="userWelcome" style="text-align:right; padding: 10px;"></div>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Lifestyle Shopping</p>
+  </footer>
+  <script>
+  const user = localStorage.getItem("loggedInUser");
+  const welcomeDiv = document.getElementById("userWelcome");
+
+  if (user) {
+    welcomeDiv.innerHTML = `
+      Welcome, <strong>${user}</strong> |
+      <button onclick="logout()" style="margin-left:10px;">Logout</button>
+    `;
+  } else {
+    welcomeDiv.innerHTML = `<a href="login.html">Login</a> | <a href="register.html">Register</a>`;
+  }
+
+  function logout() {
+    localStorage.removeItem("loggedInUser");
+    alert("Logged out successfully!");
+    window.location.reload();
+  }
+</script>
+
+</body>
+</html>

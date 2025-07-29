@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Users - Lifestyle Shopping</title>
+  <link rel="stylesheet" href="1styles.css">
+  <style>
+    .users-container {
+      margin-top: 20px;
+    }
+
+    .user-card {
+      background: #fff;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      padding: 15px;
+      margin-bottom: 15px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+
+    .user-card p {
+      margin: 5px 0;
+    }
+
+    .user-card button {
+      background-color: #e67e22;
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    .user-card button:hover {
+      background-color: #d35400;
+    }
+  </style>
+</head>
+<body>
+
+<script>
+  const user = localStorage.getItem("loggedInUser");
+  const adminEmails = ["admin@lifestyle.com"];
+  if (!user || !adminEmails.includes(user)) {
+    alert("Access denied. Admins only!");
+    window.location.href = "1index.html";
+  }
+</script>
+
+<header>
+  <h1>Admin Users</h1>
+  <nav>
+    <a href="admin.html">Dashboard</a>
+    <a href="admin-orders.html">Orders</a>
+    <a href="admin-users.html">Users</a>
+    <a href="1index.html">Site Home</a>
+  </nav>
+</header>
+
+<main>
+  <h2>Registered Users</h2>
+  <div id="usersContainer" class="users-container"></div>
+</main>
+
+<footer>
+  <p>&copy; 2025 Lifestyle Shopping</p>
+</footer>
+
+<script>
+  let users = JSON.parse(localStorage.getItem("users")) || [];
+
+  function renderUsers() {
+    const container = document.getElementById("usersContainer");
+    container.innerHTML = "";
+
+    if (users.length === 0) {
+      container.innerHTML = "<p>No users registered.</p>";
+      return;
+    }
+
+    users.forEach((user, index) => {
+      const userCard = document.createElement("div");
+      userCard.className = "user-card";
+
+      userCard.innerHTML = `
+        <p><strong>Email:</strong> ${user.email}</p>
+        <p><strong>Password:</strong> ${user.password}</p>
+        ${user.email !== "admin@lifestyle.com" ? `
+          <button onclick="deleteUser(${index})">Delete User</button>
+        ` : `<p><em>Admin account</em></p>`}
+      `;
+
+      container.appendChild(userCard);
+    });
+  }
+
+  function deleteUser(index) {
+    if (confirm("Delete this user?")) {
+      users.splice(index, 1);
+      localStorage.setItem("users", JSON.stringify(users));
+      renderUsers();
+    }
+  }
+
+  renderUsers();
+</script>
+
+</body>
+</html>

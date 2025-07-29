@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>User Login</title>
+  <link rel="stylesheet" href="1styles.css">
+</head>
+<body>
+  <header><h1>User Login</h1></header>
+  <main>
+    <form class="auth-form" onsubmit="login(event)">
+      <label for="email">Email:</label>
+      <input type="email" id="email" required>
+
+      <label for="password">Password:</label>
+      <input type="password" id="password" required>
+
+      <button type="submit">Login</button>
+    </form>
+  </main>
+  <footer><p>&copy; 2025 Lifestyle Shopping</p></footer>
+
+  <script>
+   function login(event) {
+  event.preventDefault();
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+
+  let users = JSON.parse(localStorage.getItem("users")) || [];
+  const user = users.find(u => u.email === email && u.password === password);
+
+  if (user) {
+    localStorage.setItem("loggedInUser", email);
+    alert("Login successful!");
+    window.location.href = "1index.html";
+  } else {
+    alert("Invalid email or password!");
+  }
+}
+
+  </script>
+</body>
+</html>
