@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Login</title>
+  <link rel="stylesheet" href="1styles.css">
+</head>
+<body>
+  <header>
+    <h1>Admin Login</h1>
+  </header>
+
+  <main>
+    <form class="auth-form" onsubmit="adminLogin(event)">
+      <label for="username">Username:</label>
+      <input type="text" id="username" required>
+
+      <label for="password">Password:</label>
+      <input type="password" id="password" required>
+
+      <button type="submit">Login</button>
+    </form>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Lifestyle Shopping</p>
+  </footer>
+
+  <script>
+    function adminLogin(event) {
+      event.preventDefault();
+      const username = document.getElementById("username").value;
+      const password = document.getElementById("password").value;
+
+      // Hardcoded for demo (you can store securely later)
+      if (username === "admin" && password === "admin123") {
+        localStorage.setItem("isAdmin", "true");
+        window.location.href = "1admin.html";
+      } else {
+        alert("Invalid credentials!");
+      }
+    }
+  </script>
+</body>
+</html>

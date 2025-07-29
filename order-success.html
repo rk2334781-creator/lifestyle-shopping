@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Order Placed - Lifestyle Shopping</title>
+  <link rel="stylesheet" href="1styles.css">
+</head>
+<body>
+  <header>
+    <h1>Thank You for Your Order!</h1>
+    <nav>
+      <a href="1index.html">Home</a>
+      <a href="1products.html">Shop More</a>
+    </nav>
+  </header>
+
+  <main>
+    <section style="text-align: center; padding: 50px;">
+      <h2>Your order has been placed successfully.</h2>
+      <p>We’ll send you a confirmation email shortly.</p>
+      <p>Order ID: <strong id="orderId"></strong></p>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Lifestyle Shopping</p>
+  </footer>
+
+  <script>
+    // Generate random order ID
+    const id = 'LS-' + Math.floor(Math.random() * 1000000).toString().padStart(6, '0');
+    document.getElementById(\"orderId\").textContent = id;
+
+    // Optional: Clear cart
+    localStorage.removeItem(\"cart\");
+  </script>
+</body>
+</html>
