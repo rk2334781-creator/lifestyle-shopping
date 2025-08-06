@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Your Cart - Lifestyle Shopping</title>
+  <link rel="stylesheet" href="styles1.css">
+</head>
+<body>
+
+  <!-- 🔐 User Protection -->
+  <script>
+    const user = localStorage.getItem("loggedInUser");
+    if (!user) {
+      alert("Please log in to access this page.");
+      window.location.href = "login1.html";
+    }
+  </script>
+
+  <header>
+    <h1>Your Shopping Cart</h1>
+    <nav>
+      <a href="index1.html">Home</a>
+      <a href="products1.html">Shop</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="cart-items" id="cartItems">
+      <!-- Items will be shown here -->
+    </section>
+
+    <section class="cart-summary">
+      <p id="totalPrice">Total: ₹0</p>
+      <button onclick="checkout()">Checkout</button>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Lifestyle Shopping</p>
+  </footer>
+
+  <script>
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+    const cartItemsDiv = document.getElementById("cartItems");
+
+    function updateCartDisplay() {
+      cartItemsDiv.innerHTML = "";
+      let total = 0;
+
+      if (cart.length === 0) {
+        cartItemsDiv.innerHTML = "<p>Your cart is empty.</p>";
+      } else {
+        cart.forEach((item, index) => {
+          const div = document.createElement("div");
+          div.className = "cart-item";
+          div.innerHTML = `
+            <h2>${item.name}</h2>
+            <p>Price: ₹${item.price}</p>
+            <button onclick="removeItem(${index})">Remove</button>
+          `;
+          cartItemsDiv.appendChild(div);
+          total += item.price;
+        });
+      }
+
+      document.getElementById("totalPrice").textContent = "Total: ₹" + total;
+    }
+
+    function removeItem(index) {
+      cart.splice(index, 1);
+      localStorage.setItem("cart", JSON.stringify(cart));
+      updateCartDisplay();
+    }
+
+    function checkout() {
+      const user = localStorage.getItem("loggedInUser") || "Guest";
+      const order = {
+        id: 'LS-' + Math.floor(Math.random() * 1000000).toString().padStart(6, '0'),
+        items: cart,
+        date: new Date().toLocaleString(),
+        user: user
+      };
+
+      let orderHistory = JSON.parse(localStorage.getItem("orders")) || [];
+      orderHistory.push(order);
+      localStorage.setItem("orders", JSON.stringify(orderHistory));
+
+      localStorage.removeItem("cart");
+      alert("Order placed successfully!");
+      window.location.href = "order-success.html";
+    }
+
+    updateCartDisplay();
+  </script>
+
+</body>
+</html>

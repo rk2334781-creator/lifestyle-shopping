@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>User Registration</title>
+  <link rel="stylesheet" href="login1.css">
+  <link rel="stylesheet" href="styles1.css">
+  <link rel='stylesheet' href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css'>
+  <link rel='stylesheet' href='https://fonts.googleapis.com/css2?family=Poppins&display=swap'>
+</head>
+<body>
+  <div class="wrapper">
+    <div class="login_box">
+      <div class="login-header">
+        <span>Register</span>
+      </div>
+
+      <form onsubmit="register(event)">
+        <div class="input_box">
+          <input type="email" id="regEmail" class="input-field" required />
+          <label for="regEmail" class="label">Email</label>
+          <i class="bx bx-envelope icon"></i>
+        </div>
+
+        <div class="input_box">
+          <input type="password" id="regPassword" class="input-field" required />
+          <label for="regPassword" class="label">Password</label>
+          <i class="bx bx-lock icon"></i>
+        </div>
+
+        <div class="input_box">
+          <input type="submit" class="input-submit" value="Register" />
+        </div>
+
+        <div class="register">
+          <span>Already have an account? <a href="login1.html">Login</a></span>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    function register(event) {
+      event.preventDefault();
+
+      const email = document.getElementById("regEmail").value.trim();
+      const password = document.getElementById("regPassword").value;
+
+      if (password.length < 6) {
+        alert("Password must be at least 6 characters.");
+        return;
+      }
+
+      const users = JSON.parse(localStorage.getItem("users")) || [];
+
+      const userExists = users.some(user => user.email === email);
+      if (userExists) {
+        alert("User already exists! Please log in.");
+        return;
+      }
+
+      users.push({ email, password });
+      localStorage.setItem("users", JSON.stringify(users));
+
+      alert("Registration successful!");
+      window.location.href = "login1.html";
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Products - Lifestyle Shopping</title>
+  <link rel="stylesheet" href="styles1.css">
+</head>
+<body>
+  <header>
+    <h1>Product List</h1>
+    <nav>
+      <a href="index1.html">Home</a>
+      <a href="login1.html">Login</a>
+      <a href="register1.html">Register</a>
+      <a href="cart1.html">Cart</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="product-list">
+      <div class="product">
+        <h2>Stylish T-Shirt</h2>
+        <p>Price: ₹499</p>
+        <button onclick="addToCart('Stylish T-Shirt')">Add to Cart</button>
+      </div>
+
+      <div class="product">
+        <h2>Modern Sneakers</h2>
+        <p>Price: ₹1,299</p>
+        <button onclick="addToCart('Modern Sneakers')">Add to Cart</button>
+      </div>
+
+      <div class="product">
+        <h2>Smart Watch</h2>
+        <p>Price: ₹2,999</p>
+        <button onclick="addToCart('Smart Watch')">Add to Cart</button>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Lifestyle Shopping</p>
+  </footer>
+
+  <script>
+    function addToCart(product) {
+      alert(product + " added to cart!");
+    }
+  </script>
+</body>
+</html>

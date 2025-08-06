@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Admin Login</title>
-  <link rel="stylesheet" href="1styles.css">
+  <link rel="stylesheet" href="styles1.css">
 </head>
 <body>
   <header>
@@ -35,7 +35,7 @@
       // Hardcoded for demo (you can store securely later)
       if (username === "admin" && password === "admin123") {
         localStorage.setItem("isAdmin", "true");
-        window.location.href = "1admin.html";
+        window.location.href = "admin.html";
       } else {
         alert("Invalid credentials!");
       }
